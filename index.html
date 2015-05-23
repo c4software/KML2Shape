@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KML2Shape</title>
+
+    <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+    <script src="//cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+    
+    <script src="leaflet.filelayer.js"></script>
+    <script src="togeojson/togeojson.js"></script>
+
+    <script src="dataExport.js"></script>
+    <script src="shape.js"></script>
+
+    <style>
+        #map {
+            position: absolute;
+            top:0;
+            left: 0;
+            right: 0;
+            bottom:0;
+        }
+
+        .leaflet-overlay-pane>.leaflet-zoom-animated {
+            opacity: .6 !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script type="text/javascript">
+
+        // Manage the file import.
+        var osm = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; 2013 OpenStreetMap contributors',
+        });
+
+        var map = L.map('map', {center: [46.7774317,4.2503798], zoom: 6}).addLayer(osm);
+
+        L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open">O</i>';
+        L.Control.fileLayerLoad({
+            fitBounds: true,
+            layerOptions: {pointToLayer: function (data, latlng) {
+                var shapeData = shapeIt(latlng.lat, latlng.lng).bindPopup(data.properties.name);
+                return shapeData;
+            }},
+        }).addTo(map);
+    </script>
+    <div
+</body>
+</html>
